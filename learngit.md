@@ -122,6 +122,8 @@ Git鼓励大量使用分支：
 
 查看分支：`git branch`
 
+查看所有分支（包括本地和远程）：`git branch -a`
+
 创建分支：`git branch <name>`
 
 切换分支：`git checkout <name>`
@@ -131,6 +133,8 @@ Git鼓励大量使用分支：
 合并某分支到当前分支：`git merge <name>`
 
 删除分支：`git branch -d <name>`
+
+删除远程分支：`git push origin --delete <BranchName>`
 
 当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
 
@@ -177,8 +181,10 @@ git checkout -b dev
 git branch dev
 git checkout dev
 git branch
+git branch -a
 git merge dev
 git branch -d dev
+git push origin --delete dev
 git log --graph --pretty=oneline --abbrev-commit
 git merge --no-ff -m "merge with no-ff" dev
 git stash
