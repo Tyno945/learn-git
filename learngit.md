@@ -9,6 +9,7 @@
         - [撤销修改](#撤销修改)
     - [2.4 远程仓库](#24-远程仓库)
         - [添加远程库](#添加远程库)
+        - [实现fork的项目与原项目同步](#实现fork的项目与原项目同步)
         - [从远程库克隆](#从远程库克隆)
     - [2.5 分支管理](#25-分支管理)
         - [分支策略](#分支策略)
@@ -128,6 +129,22 @@ ssh-keygen -t rsa -C "youremail@example.com"
 ```
 git remote add origin git@github.com:Tyno945/learn-git.git
 git push -u origin master
+```
+
+#### 实现fork的项目与原项目同步
+
+```
+1. 查看本地项目的远程信息
+git remote -v
+
+2. 添加原项目远程分支
+git remote add upstream https://github.com/Tyno945/learn-git.git
+
+3. 从原项目拉取分支到本地
+git pull upstream master
+
+4. 将本地代码提交到自己主页的分支，即origin上
+git push origin master
 ```
 
 #### 从远程库克隆

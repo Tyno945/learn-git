@@ -22,6 +22,7 @@ You’ll learn how to:
 5. 开发者在自己的分支进行开发，完成后提交commit，并push到远程库
 6. 开发者Open a Pull Request
 7. 管理者审核，通过后Merge
+8. [开发者设置fork项目与原项目保持同步](https://www.jianshu.com/p/fede3333205f)
 
 
 Git is a distributed version control system.
