@@ -296,6 +296,10 @@ git config --global color.ui true
 
 ### 3.2 配置别名
 
+输出所有配置项以及配置项的位置
+
+    git config --list --show-origin
+
 ### 3.3 使用Github
 
     如何参与一个开源项目
