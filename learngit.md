@@ -26,6 +26,7 @@
 - [4. 难点及疑问](#4-难点及疑问)
   - [4.1. Rebase](#41-rebase)
   - [4.2. pull request](#42-pull-request)
+  - [4.3. 忽略文件的实践](#43-忽略文件的实践)
 - [5. 参考资料](#5-参考资料)
 
 <!-- /TOC -->
@@ -131,6 +132,9 @@ ssh-keygen -t rsa -C "youremail@example.com"
 此后，每次本地提交后，只要有必要，就可以使用命令`git push origin master`推送最新修改；
 
 ```
+git remote // 显示远程关联的库名称
+git remote -v // 详细显示远程关联的库
+git remote remove origin // 取消原来关联的远程库
 git remote add origin git@github.com:Tyno945/learn-git.git
 git push -u origin master
 ```
@@ -391,7 +395,11 @@ git rebase
 
 ### 4.2. pull request
 
-如何使用Github参与开源项目？
+如何使用Github参与开源项目?
+
+### 4.3. 忽略文件的实践
+
+实际开发中如何选择哪些文件忽略?
 
 ## 5. 参考资料
 
