@@ -1,28 +1,32 @@
 <!-- TOC depthFrom:2 -->
 
 - [1. Git 简介](#1-git-简介)
-        - [集中式VS分布式](#集中式vs分布式)
+    - [1.0.1. 集中式VS分布式](#101-集中式vs分布式)
 - [2. Git 基础](#2-git-基础)
-    - [2.1 初始配置](#21-初始配置)
-    - [2.2 创建版本库](#22-创建版本库)
-    - [2.3 版本管理](#23-版本管理)
-        - [撤销修改](#撤销修改)
-    - [2.4 远程仓库](#24-远程仓库)
-        - [添加远程库](#添加远程库)
-        - [从远程库克隆](#从远程库克隆)
-    - [2.5 分支管理](#25-分支管理)
-        - [分支策略](#分支策略)
-        - [多人协作](#多人协作)
-    - [2.6 标签管理](#26-标签管理)
+  - [2.1. 初始配置](#21-初始配置)
+  - [2.2. 创建版本库](#22-创建版本库)
+  - [2.3. 版本管理](#23-版本管理)
+    - [2.3.1. 撤销修改](#231-撤销修改)
+  - [2.4. 远程仓库](#24-远程仓库)
+    - [2.4.1. 添加远程库](#241-添加远程库)
+    - [2.4.2. 实现fork的项目与原项目同步](#242-实现fork的项目与原项目同步)
+    - [2.4.3. 从远程库克隆](#243-从远程库克隆)
+  - [2.5. 分支管理](#25-分支管理)
+    - [2.5.1. 分支策略](#251-分支策略)
+    - [2.5.2. 多人协作](#252-多人协作)
+    - [2.5.3. Rebase](#253-rebase)
+  - [2.6. 标签管理](#26-标签管理)
 - [3. Git 进阶](#3-git-进阶)
-    - [3.1 忽略特殊文件](#31-忽略特殊文件)
-    - [3.2 配置别名](#32-配置别名)
-    - [3.3 使用Github](#33-使用github)
-    - [3.4 使用码云](#34-使用码云)
-    - [3.5 搭建Git服务器](#35-搭建git服务器)
+  - [3.1. 忽略特殊文件](#31-忽略特殊文件)
+  - [3.2. 配置别名](#32-配置别名)
+  - [3.3. 使用Github](#33-使用github)
+    - [3.3.1. Getting Started with GitHub Pages](#331-getting-started-with-github-pages)
+  - [3.4. 使用码云](#34-使用码云)
+  - [3.5. 搭建Git服务器](#35-搭建git服务器)
 - [4. 难点及疑问](#4-难点及疑问)
-    - [4.1 Rebase](#41-rebase)
-    - [4.2 pull request](#42-pull-request)
+  - [4.1. Rebase](#41-rebase)
+  - [4.2. pull request](#42-pull-request)
+  - [4.3. 忽略文件的实践](#43-忽略文件的实践)
 - [5. 参考资料](#5-参考资料)
 
 <!-- /TOC -->
@@ -34,7 +38,7 @@ Git是目前世界上最先进的分布式版本控制系统
 
     Git的诞生故事
 
-#### 集中式VS分布式
+#### 1.0.1. 集中式VS分布式
 
 集中式版本控制系统，版本库是集中存放在中央服务器的。集中式版本控制系统最大的毛病就是必须联网才能工作。
 
@@ -42,14 +46,14 @@ Git是目前世界上最先进的分布式版本控制系统
 
 ## 2. Git 基础
 
-### 2.1 初始配置
+### 2.1. 初始配置
 
 ```
 git config --global user.name "Your Name"
 git config --global user.email "email@example.com"
 ```
 
-### 2.2 创建版本库
+### 2.2. 创建版本库
 
 初始化一个Git仓库，使用`git init`命令。
 
@@ -63,7 +67,7 @@ git add readme.txt
 git commit -m "wrote a readme file"
 ```
 
-### 2.3 版本管理
+### 2.3. 版本管理
 
 要随时掌握工作区的状态，使用`git status`命令。
 
@@ -77,13 +81,15 @@ git commit -m "wrote a readme file"
 
 Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支`master`，以及指向`master`的一个指针叫`HEAD`。
 
+![工作区和版本库](./img/0.jpg '工作区和版本库')
+
 Git是跟踪修改的，每次修改，如果不用git add到暂存区，那就不会加入到commit中。
 
 命令`git checkout -- readme.txt`意思就是，把`readme.txt`文件在工作区的修改全部撤销，就是让这个文件回到最近一次`git commi`t或`git add`时的状态。
 
 用命令`git reset HEAD <file>`可以把暂存区的修改撤销掉（unstage），重新放回工作区
 
-#### 撤销修改
+#### 2.3.1. 撤销修改
 
 场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令`git checkout -- file`。
 
@@ -91,7 +97,7 @@ Git是跟踪修改的，每次修改，如果不用git add到暂存区，那就�
 
 场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。
 
-```
+```bash
 git status
 git diff readme.txt
 git log
@@ -103,7 +109,7 @@ git reset HEAD readme.txt
 git rm test.txt
 ```
 
-### 2.4 远程仓库
+### 2.4. 远程仓库
 
 实际情况往往是这样，找一台电脑充当服务器的角色，每天24小时开机，其他每个人都从这个“服务器”仓库克隆一份到自己的电脑上，并且各自把各自的提交推送到服务器仓库里，也从服务器仓库中拉取别人的提交。
 
@@ -115,7 +121,7 @@ git rm test.txt
 ssh-keygen -t rsa -C "youremail@example.com"
 ```
 
-#### 添加远程库
+#### 2.4.1. 添加远程库
 
 先在Github上创建一个同名的空仓库，然后进行关联，再进行版本推送。
 
@@ -126,11 +132,30 @@ ssh-keygen -t rsa -C "youremail@example.com"
 此后，每次本地提交后，只要有必要，就可以使用命令`git push origin master`推送最新修改；
 
 ```
+git remote // 显示远程关联的库名称
+git remote -v // 详细显示远程关联的库
+git remote remove origin // 取消原来关联的远程库
 git remote add origin git@github.com:Tyno945/learn-git.git
 git push -u origin master
 ```
 
-#### 从远程库克隆
+#### 2.4.2. 实现fork的项目与原项目同步
+
+```
+1. 查看本地项目的远程信息
+git remote -v
+
+2. 添加原项目远程分支
+git remote add upstream https://github.com/Tyno945/learn-git.git
+
+3. 从原项目拉取分支到本地
+git pull upstream master
+
+4. 将本地代码提交到自己主页的分支，即origin上
+git push origin master
+```
+
+#### 2.4.3. 从远程库克隆
 
 先创建远程库，然后，从远程库克隆。要克隆一个仓库，首先必须知道仓库的地址，然后使用`git clone`命令克隆。
 
@@ -142,9 +167,25 @@ Git支持多种协议，包括https，但通过ssh支持的原生git协议速度
 git clone git@github.com:Tyno945/learn-git.git
 ```
 
-### 2.5 分支管理
+### 2.5. 分支管理
 
     掌握创建分支的本质是创建指针
+
+1. 创建新分支
+
+![创建新分支](img/1.png '创建新分支')
+
+2. 新分支提交
+
+![新分支提交](img/2.png '新分支提交')
+
+3. 把dev合并到master上
+
+![合并](img/3.png '合并')
+
+4. 删除dev分支
+
+![删除分支](img/4.png '删除分支')
 
 Git鼓励大量使用分支：
 
@@ -170,7 +211,11 @@ Git鼓励大量使用分支：
 
 用`git log --graph`命令可以看到分支合并图。
 
-#### 分支策略
+#### 2.5.1. 分支策略
+
+强制禁用Fast forward模式，Git就会在merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息。
+
+![merge with no-ff](img/5.png 'merge with no-ff')
 
 在实际开发中，我们应该按照几个基本原则进行分支管理：
 
@@ -184,13 +229,13 @@ Git鼓励大量使用分支：
 
 修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除；
 
-当手头工作没有完成时，先把工作现场`git stash`一下，然后去修复bug，修复后，再`git stash pop`，回到工作现场。
+当手头工作没有完成时，先把工作现场`git stash`一下，然后去修复bug，修复后，利用`git stash list`查看,再`git stash pop`，回到工作现场。
 
 开发一个新feature，最好新建一个分支；
 
 如果要丢弃一个没有被合并过的分支，可以通过`git branch -D <name>`强行删除。
 
-#### 多人协作
+#### 2.5.2. 多人协作
 
 当你的小伙伴从远程库clone时，默认情况下，你的小伙伴只能看到本地的master分支。你的小伙伴要在dev分支上开发，就必须创建远程origin的dev分支到本地，于是他用这个命令`git checkout -b dev origin/dev`创建本地dev分支
 
@@ -198,7 +243,7 @@ Git鼓励大量使用分支：
 
 1. 首先，可以试图用`git push origin <branch-name>`推送自己的修改；
 
-2. 如果推送失败，则因为远程分支比你的本地更新，需要先用`git pull`试图合并；
+2. 如果推送失败，则因为远程分支比你的本地更新，需要先用`git pull`试图合并；pull失败时需要建立链接`git branch --set-upstream-to=origin/dev dev`
 
 3. 如果合并有冲突，则解决冲突，并在本地提交；
 
@@ -229,7 +274,13 @@ git pull
 git branch --set-upstream-to=origin/dev dev
 ```
 
-### 2.6 标签管理
+#### 2.5.3. Rebase
+
+rebase操作可以把本地未push的分叉提交历史整理成直线；
+
+rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
+
+### 2.6. 标签管理
 
 Git的标签虽然是版本库的快照，但其实它就是指向某个commit的指针（跟分支很像对不对？但是分支可以移动，标签不能移动），所以，创建和删除标签都是瞬间完成的。tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。
 
@@ -265,7 +316,7 @@ git push origin :refs/tags/v0.9
 git config --global color.ui true
 ```
 
-### 3.1 忽略特殊文件
+### 3.1. 忽略特殊文件
 
 在Git工作区的根目录下创建一个特殊的`.gitignore`文件，然后把要忽略的文件名填进去，Git就会自动忽略这些文件。
 
@@ -277,9 +328,24 @@ git config --global color.ui true
 
 所有配置文件可以直接在线浏览：https://github.com/github/gitignore
 
-### 3.2 配置别名
+### 3.2. 配置别名
 
-### 3.3 使用Github
+
+    $ git config --global alias.st status
+    $ git config --global alias.unstage 'reset HEAD'
+
+    配置一个git last，让其显示最后一次提交信息:
+    $ git config --global alias.last 'log -1'
+
+    $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+输出所有配置项以及配置项的位置
+
+    git config --list --show-origin
+
+### 3.3. 使用Github
+
+[Github Guides](https://guides.github.com/)
 
     如何参与一个开源项目
 
@@ -289,7 +355,21 @@ git config --global color.ui true
 
 可以推送pull request给官方仓库来贡献代码。
 
-### 3.4 使用码云
+#### 3.3.1. Getting Started with GitHub Pages
+
+[GitHub Pages](https://guides.github.com/features/pages/)
+
+1. 创建repository,命名`username.github.io`
+2. 点击 Setting-->GitHub Pages-->Choose a theme
+3. 创建完成后，提交即可生成GitHub Pages
+4. 配置在`_config.yml`文件上修改
+
+引擎使用的是[jekyll](https://jekyllrb.com/):
+> Using Jekyll, you can blog using beautiful Markdown syntax, and without having to deal with any databases. 
+
+    jekyll依赖于Ruby语言，国内包管理镜像[RubyGems 镜像](https://gems.ruby-china.org/)
+
+### 3.4. 使用码云
 
 国内的Git托管服务——[码云](https://gitee.com/)
 
@@ -299,11 +379,11 @@ git remote add github git@github.com:michaelliao/learngit.git
 git remote add gitee git@gitee.com:liaoxuefeng/learngit.git
 ```
 
-### 3.5 搭建Git服务器
+### 3.5. 搭建Git服务器
 
 ## 4. 难点及疑问
 
-### 4.1 Rebase
+### 4.1. Rebase
 
 rebase操作可以把本地未push的分叉提交历史整理成直线；
 
@@ -313,9 +393,13 @@ rebase的目的是使得我们在查看历史提交的变化时更容易，因�
 git rebase
 ```
 
-### 4.2 pull request
+### 4.2. pull request
 
-如何使用Github参与开源项目？
+如何使用Github参与开源项目?
+
+### 4.3. 忽略文件的实践
+
+实际开发中如何选择哪些文件忽略?
 
 ## 5. 参考资料
 
