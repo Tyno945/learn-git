@@ -47,11 +47,18 @@ Git是目前世界上最先进的分布式版本控制系统
 ## 2. Git 基础
 
 ### 2.1. 初始配置
-
+1、 下载Git并安装
+2、进行以下初始配置
 ```
 git config --global user.name "Your Name"
 git config --global user.email "email@example.com"
 ```
+3、在本地用户文件夹.ssh生成rsa密钥对
+```
+ ssh-keygen -t rsa -C "441356517@qq.com"
+```
+4、将id_rsa.pub文件内容复制，粘贴到Github网站setting里的新增SSH中
+5、可以成功git clone下自己账户下的仓库
 
 ### 2.2. 创建版本库
 
